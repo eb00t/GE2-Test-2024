@@ -2,7 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SpineAnimator : MonoBehaviour {
+public class SpineAnimator : MonoBehaviour
+{
+    private CreatureGenerator _creatureGenerator;
     public GameObject[] bones;
 
     public float bondDamping = 25;
@@ -11,7 +13,10 @@ public class SpineAnimator : MonoBehaviour {
     private List<Vector3> offsets = new List<Vector3>();
     
     // Use this for initialization
-    void Start () {
+    void Start ()
+    {
+        _creatureGenerator = GetComponent<CreatureGenerator>();
+        
         if (bones != null)
         {
             for (int i = 0; i < bones.Length; i++)
