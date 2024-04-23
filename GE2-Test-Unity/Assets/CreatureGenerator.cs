@@ -20,25 +20,26 @@ public class CreatureGenerator : MonoBehaviour
     {
         _spineAnimator = GetComponent<SpineAnimator>();
         bodyPart = Resources.Load<GameObject>("Prefabs/BodyBone");
-        segments = new List<GameObject>();
         
-        Gizmos.DrawCube(transform.position, transform.localScale);
-        foreach (GameObject go in segments)
-        {
-            Gizmos.DrawCube(go.transform.localPosition, go.transform.localScale);
-        }
-
         for (int i = 0; i < length; i++)
         {
-            var bodySegment = Instantiate(bodyPart, new Vector3(transform.position.x, transform.position.y, transform.position.z - offset), Quaternion.identity, transform);
-            segments.Add(bodySegment);
+            Vector3 segPos = new Vector3(transform.localPosition.x, transform.localPosition.y,
+                transform.localPosition.z - (transform.localScale.z * i + offset));
+            Gizmos.DrawCube(segPos, transform.localScale);
         }
         
     }
 
     void Start()
     {
-       
+        segments = new List<GameObject>();
+        for (int i = 0; i < length; i++)
+        {
+            Vector3 segPos = new Vector3(transform.localPosition.x, transform.localPosition.y,
+                transform.localPosition.z - (transform.localScale.z * i + offset));
+            var bodySegment = Instantiate(bodyPart, segPos, Quaternion.identity, transform);
+            segments.Add(bodySegment);
+        }
     }
 
 
