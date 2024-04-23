@@ -10,7 +10,7 @@ public class CreatureGenerator : MonoBehaviour
     public float length;
     public float frequency;
     public Quaternion startAngle;
-    public float baseSize;
+    public Vector3 baseSize;
     public float multiplier;
     private GameObject bodyPart;
     public List<GameObject> segments;
@@ -19,13 +19,15 @@ public class CreatureGenerator : MonoBehaviour
     private void OnDrawGizmos()
     {
         _spineAnimator = GetComponent<SpineAnimator>();
-        bodyPart = Resources.Load<GameObject>("Prefabs/BodyBone");
+        transform.localScale = baseSize;
+        transform.rotation = startAngle;
         
-        for (int i = 0; i < length; i++)
+        for (int i = 0; i < length + 1; i++)
         {
+            Vector3 scaleSize = baseSize * frequency * i;
             Vector3 segPos = new Vector3(transform.localPosition.x, transform.localPosition.y,
-                transform.localPosition.z - (transform.localScale.z * i + offset));
-            Gizmos.DrawCube(segPos, transform.localScale);
+                transform.localPosition.z - (scaleSize.z * i - offset) + transform.localScale.z);
+            Gizmos.DrawCube(segPos, scaleSize);
         }
         
     }
@@ -33,11 +35,12 @@ public class CreatureGenerator : MonoBehaviour
     void Start()
     {
         segments = new List<GameObject>();
+        bodyPart = Resources.Load<GameObject>("Prefabs/BodyBone");
         for (int i = 0; i < length; i++)
         {
             Vector3 segPos = new Vector3(transform.localPosition.x, transform.localPosition.y,
                 transform.localPosition.z - (transform.localScale.z * i + offset));
-            var bodySegment = Instantiate(bodyPart, segPos, Quaternion.identity, transform);
+            var bodySegment = Instantiate(bodyPart, segPos, transform.rotation, transform);
             segments.Add(bodySegment);
         }
     }

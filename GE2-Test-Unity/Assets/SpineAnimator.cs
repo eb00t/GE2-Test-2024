@@ -18,13 +18,10 @@ public class SpineAnimator : MonoBehaviour
         _creatureGenerator = GetComponent<CreatureGenerator>();
         if (bones != null)
         {
-            for (int i = 0; i < bones.Length; i++)
+            for (int i = 0; i < _creatureGenerator.segments.Count; i++)
             {
                 bones[i] = _creatureGenerator.segments[i];
-            }
-            
-            for (int i = 0; i < bones.Length; i++)
-            {
+                
                 GameObject prevBone = (i == 0)
                         ? this.gameObject
                         : bones[i - 1];
