@@ -14,7 +14,6 @@ public class CreatureGenerator : MonoBehaviour
     public float multiplier;
     private GameObject bodyPart;
     public List<GameObject> segments;
-    public float offset;
 
     private void OnDrawGizmos()
     {
@@ -26,8 +25,9 @@ public class CreatureGenerator : MonoBehaviour
         {
             Vector3 scaleSize = baseSize * frequency * i;
             Vector3 segPos = new Vector3(transform.localPosition.x, transform.localPosition.y,
-                transform.localPosition.z - (scaleSize.z * i - offset) + transform.localScale.z);
-            Gizmos.DrawCube(segPos, scaleSize);
+                transform.localPosition.z - (scaleSize.z * i));
+            Gizmos.color = Color.magenta;
+            Gizmos.DrawWireCube(segPos, scaleSize);
         }
         
     }
@@ -36,18 +36,14 @@ public class CreatureGenerator : MonoBehaviour
     {
         segments = new List<GameObject>();
         bodyPart = Resources.Load<GameObject>("Prefabs/BodyBone");
-        for (int i = 0; i < length; i++)
+        for (int i = 0; i < length + 1; i++)
         {
+            Vector3 scaleSize = baseSize * frequency * i;
             Vector3 segPos = new Vector3(transform.localPosition.x, transform.localPosition.y,
-                transform.localPosition.z - (transform.localScale.z * i + offset));
-            var bodySegment = Instantiate(bodyPart, segPos, transform.rotation, transform);
+                (transform.localPosition.z - (scaleSize.z * i)));
+            var bodySegment = Instantiate(bodyPart, segPos, startAngle);
+            bodySegment.transform.localScale = scaleSize;
             segments.Add(bodySegment);
         }
-    }
-
-
-    void Update()
-    {
-
     }
 }
